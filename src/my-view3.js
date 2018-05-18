@@ -8,22 +8,25 @@ import '@polymer/iron-ajax/iron-ajax.js';
 class MyView3 extends LitElement {
     _didRender() {
         this.shadowRoot.getElementById('ajax').addEventListener('response', function(e){
-            if(e.detail.response.deceasedBoolean = false)
+            if(true)
             {
-                e.target.parentNode.getElementById('decease').checked = true;
-
+                if (e.detail.response.deceasedBoolean) {
+                    e.target.parentNode.getElementById('decease').checked = true;
+                }
+                else if (!e.detail.response.deceasedBoolean) {
+                    e.target.parentNode.getElementById('decease').checked = false;
+                }
+                else {
+                    e.target.parentNode.removeChild(e.target.parentNode.childNodes[1]);
+                    e.target.parentNode.removeChild(e.target.parentNode.childNodes[3]);
+                }
+            }
+            if (e.detail.response.deceasedDateTime != undefined)
+            {
+                e.detail.response.deceasedDateTime = e.target.parentNode.getElementById('date');
             }
             else{
-                e.target.parentNode.getElementById('decease').checked = false;
-
-            }
-
-            if(e.detail.response.deceasedDateTime === undefined)
-            {
-                e.target.parentNode.getElementById('date').disabled = true;
-            }
-            else{
-                e.target.parentNode.getElementById('date').value = e.detail.response.deceasedDateTime;
+                e.target.parentNode.removeChild(e.target.parentNode.childNodes[3]);
             }
 
             // "e.detail.response.active" is check box status from server
@@ -34,10 +37,10 @@ class MyView3 extends LitElement {
     _render({}) {
         return html`
       <mwc-formfield alignEnd label="Deceased status:">
-         <mwc-checkbox id="decease"></mwc-checkbox>
+         <mwc-checkbox id="decease" value = "true"></mwc-checkbox>
       </mwc-formfield> 
       <mwc-formfield alignEnd label="Deceased date:">
-         <input id="date" type="date">
+         <input id="date" type="datetime-local">
        </mwc-formfield>      
       <iron-ajax id="ajax" auto handle-as="json" url="http://hapi.fhir.org/baseDstu3/Patient/2"></iron-ajax> 
        
