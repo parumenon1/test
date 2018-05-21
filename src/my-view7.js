@@ -5,37 +5,53 @@ import '@polymer/iron-ajax/iron-ajax.js';
 import './fhir-period.js';
 
 class MyView7 extends LitElement {
+
+    static get properties() {
+        return {
+            useField: Boolean,
+            identifierField: Boolean,
+            periodField: Boolean,
+            url: String
+        }
+    }
+
+    constructor() {
+        super();
+        this.useField = true;
+        this.identifierField = true;
+        this.periodField = true;
+    }
+
     _didRender() {
-        this.shadowRoot.getElementById('ajax').addEventListener('response', function (e) {
+        this.shadowRoot.getElementById('ajax').addEventListener('iron-ajax-response', function (e) {
             var i = 0;
             for (let identifier of e.detail.response.identifier) {
                 if (i > 0) {
                     var child = e.target.parentNode.childNodes[1].cloneNode(true);
                     e.target.parentNode.appendChild(child);
                 }
-                e.target.parentNode.getElementById('identifier').label = e.detail.response.identifier[i].system;
-                e.target.parentNode.getElementById('identifier').value = e.detail.response.identifier[i].value;
-                e.target.parentNode.getElementById('select').value = e.detail.response.identifier[i].use;
+                e.target.parentNode.querySelectorAll('.useField')[i].value = e.detail.response.identifier[i].use;
+                e.target.parentNode.querySelectorAll('.identifierField')[i].label = e.detail.response.identifier[i].system;
+                e.target.parentNode.querySelectorAll('.identifierField')[i].value = e.detail.response.identifier[i].value;
                 i++;
-                console.log(e.target.parentNode.getElementById('system'))
             }
         });
     }
 
-    _render({}) {
+    _render({useField, identifierField, periodField, url}) {
         return html`
 <div>
-    <label>Use</label>
-    <select id="select">
+    ${useField ? html`
+    Use:<select class="useField">
         <option value="usual">Usual</option>
         <option value="official">Official</option>
         <option value="temp">Temporary</option>
         <option value="secondary">Secondary</option>
-    </select><br>
-    <mwc-textfield outlined id="identifier" label="system:"></mwc-textfield>
-    <fhir-period></fhir-period>
+    </select>` : ''}
+    ${identifierField ? html`<mwc-textfield outlined class="identifierField" label="system:"></mwc-textfield>`: ''}
+    ${periodField ? html`<fhir-period class="periodField"></fhir-period>`: ''}
 </div>
-<iron-ajax id="ajax" auto handle-as="json" url="http://hapi.fhir.org/baseDstu3/Patient/81036"></iron-ajax>
+<iron-ajax id="ajax" auto handle-as="json" url="${url}"></iron-ajax>
     `;
     }
 }
