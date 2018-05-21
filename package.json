@@ -16,6 +16,7 @@
     "@material/mwc-checkbox": "file:material-components-web-components/packages/checkbox",
     "@material/mwc-formfield": "file:material-components-web-components/packages/formfield",
     "@material/mwc-radio": "file:material-components-web-components/packages/radio",
+    "@material/mwc-switch": "file:material-components-web-components/packages/switch",
     "@material/mwc-textfield": "file:material-components-web-components/packages/textfield",
     "@polymer/app-layout": "^3.0.0-pre.15",
     "@polymer/app-route": "^3.0.0-pre.15",

@@ -6,47 +6,36 @@ import './fhir-period.js';
 
 class MyView7 extends LitElement {
     _didRender() {
-        this.shadowRoot.getElementById('ajax').addEventListener('response', function(e){
-            for(let identifier of e.detail.response.identifier){
-                var identifierField = document.createElement('mwc-textfield');
-                identifierField.setAttribute('outlined', 'true');
-                //TODO: low priority but verify system not null
-                identifierField.setAttribute('label', 'id: ' + identifier.system);
-                identifierField.value = identifier.value;
-
-                //TODO: add type as a CodeableConcept element
-
-                if(identifier.use != null) {
-                    var useSelect = document.createElement('select');
-                    var useOptions = {
-                        0 : 'usual',
-                        1 : 'official',
-                        2 : 'temp',
-                        3 : 'secondary'
-                    };
-                    for(let i in useOptions) {
-                        if(useOptions[i] == identifier.use) {
-                            useSelect.add(new Option(useOptions[i], i, true, true));
-                        } else {
-                            useSelect.add(new Option(useOptions[i], i));
-                        }
-                    }
-                    e.target.parentNode.appendChild(useSelect);
+        this.shadowRoot.getElementById('ajax').addEventListener('response', function (e) {
+            var i = 0;
+            for (let identifier of e.detail.response.identifier) {
+                if (i > 0) {
+                    var child = e.target.parentNode.childNodes[1].cloneNode(true);
+                    e.target.parentNode.appendChild(child);
                 }
-                e.target.parentNode.appendChild(identifierField);
-                if(identifier.period != null) {
-                    var periodField = document.createElement('fhir-period');
-                    e.target.parentNode.appendChild(periodField);
-                }
-                var br = document.createElement('br');
-                e.target.parentNode.appendChild(br);
+                e.target.parentNode.getElementById('identifier').label = e.detail.response.identifier[i].system;
+                e.target.parentNode.getElementById('identifier').value = e.detail.response.identifier[i].value;
+                e.target.parentNode.getElementById('select').value = e.detail.response.identifier[i].use;
+                i++;
+                console.log(e.target.parentNode.getElementById('system'))
             }
         });
     }
 
     _render({}) {
         return html`
-     <iron-ajax id="ajax" auto handle-as="json" url="http://hapi.fhir.org/baseDstu3/Patient/81036"></iron-ajax>
+<div>
+    <label>Use</label>
+    <select id="select">
+        <option value="usual">Usual</option>
+        <option value="official">Official</option>
+        <option value="temp">Temporary</option>
+        <option value="secondary">Secondary</option>
+    </select><br>
+    <mwc-textfield outlined id="identifier" label="system:"></mwc-textfield>
+    <fhir-period></fhir-period>
+</div>
+<iron-ajax id="ajax" auto handle-as="json" url="http://hapi.fhir.org/baseDstu3/Patient/81036"></iron-ajax>
     `;
     }
 }
