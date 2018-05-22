@@ -33,7 +33,7 @@ class MyView6 extends LitElement {
             }
             else if(e.detail.response.maritalStatus == undefined)
             {
-                console.log("Value was not filled by user previously")
+                e.target.parentNode.removeChild(e.target.parentNode.childNodes[1]);
             }
         });
     }
