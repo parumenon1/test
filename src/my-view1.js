@@ -25,7 +25,7 @@ class MyView1 extends LitElement {
     }
     _didRender() {
 
-        this.shadowRoot.getElementById('ajax').addEventListener('response', function(e){
+        this.shadowRoot.getElementById('ajax').addEventListener('iron-ajax-response', function(e){
             var i = 0;
             for (let val of e.detail.response.name) {
                 if (i > 0) {
@@ -42,7 +42,7 @@ class MyView1 extends LitElement {
 
     }
 
-    _render({useField, suffixField, fName, lName, periodField}) {
+    _render({useField, suffixField, fName, lName, periodField, url}) {
         return html`
    <div>  
    ${useField ? html`
@@ -51,7 +51,7 @@ class MyView1 extends LitElement {
          <option value="usual">Usual</option>
          <option value="official">Official</option>
          <option value="temp">Temporary</option>
-         <option value="nick">Nickname</option>
+         <option value="nickname">Nickname</option>
          <option value="anonymous">Anonymous</option>
          <option value="old">Old</option>
          <option value="maiden">Maiden</option>
@@ -62,13 +62,13 @@ class MyView1 extends LitElement {
          <option value="ms">Ms</option>
          <option value="mrs">Mrs</option>
          <option value="Junior">Jr</option>
-         <option value="senior">Sr</option>
+         <option value="Senior">Sr</option>
      </select>` : ''}
      ${fName ? html`<mwc-textfield outlined class="fName" id="firstname" label="First Name:"></mwc-textfield>` : ''}
      ${lName ? html`<mwc-textfield outlined class="lName" id="lastname" label="Last Name:"></mwc-textfield>` : ''}
      ${periodField ? html`<fhir-period class="periodField"></fhir-period>` : ''}
      </div> 
-     <iron-ajax id="ajax" auto handle-as="json" url="http://hapi.fhir.org/baseDstu3/Patient/2"></iron-ajax>
+     <iron-ajax id="ajax" auto handle-as="json" url="${url}"></iron-ajax>
     `;
     }
 }
