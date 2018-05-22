@@ -20,6 +20,8 @@ class MyView4 extends LitElement {
 
     _didRender() {
         this.shadowRoot.getElementById('ajax').addEventListener('iron-ajax-response', function (e) {
+            if(e.detail.response.gender != undefined)
+            {
             var i = 0;
             while (true) {
                 if (e.target.parentNode.querySelectorAll("mwc-radio")[i].value == e.detail.response.gender) {
@@ -28,18 +30,22 @@ class MyView4 extends LitElement {
                 }
                 i++;
             }
+            }
+            else if(e.detail.response.gender != undefined)
+            {
+                e.target.parentNode.removeChild(e.target.parentNode.childNodes[1]);
+            }
         });
     }
 
     _render({genderVal, url}) {
         return html`
-       ${genderVal ? html`
-       <div class="genderVal">
-         <mwc-formfield label="Male"><mwc-radio name="gender" id="male" value="male"></mwc-radio></mwc-formfield><br>
+        <div class="genderVal">
+       ${genderVal ? html`<mwc-formfield label="Male"><mwc-radio name="gender" id="male" value="male"></mwc-radio></mwc-formfield><br>
          <mwc-formfield label="Female"><mwc-radio name="gender" id="female" value="female"></mwc-radio></mwc-formfield><br>
          <mwc-formfield label="Other"><mwc-radio name="gender" id="other" value="other"></mwc-radio> </mwc-formfield> <br>            
-         <mwc-formfield label="Unknown"><mwc-radio name="gender" id="unknown" value="unknown"></mwc-radio></mwc-formfield>
-       </div>` : ''}
+         <mwc-formfield label="Unknown"><mwc-radio name="gender" id="unknown" value="unknown"></mwc-radio></mwc-formfield>` : ''}
+       </div>
        <iron-ajax id="ajax" auto handle-as="json" url="${url}"></iron-ajax>
        
     `;
