@@ -17,7 +17,7 @@ class MyView2 extends LitElement {
     }
     _didRender() {
 
-        this.shadowRoot.getElementById('ajax').addEventListener('response', function(e){
+        this.shadowRoot.getElementById('ajax').addEventListener('iron-ajax-response', function(e){
             if(e.detail.response.active)
             {
                 e.target.parentNode.getElementById('active').checked = true;
@@ -29,12 +29,12 @@ class MyView2 extends LitElement {
 
         });
     }
-    _render({activeStatus}) {
+    _render({activeStatus, url}) {
         return html`
        ${activeStatus ? html`<mwc-formfield class="activeStatus" alignEnd label="Active status:">
          <mwc-checkbox id="active" value="true"></mwc-checkbox>
          </mwc-formfield>` : ''}
-       <iron-ajax id="ajax" auto handle-as="json" url="{{url}}"></iron-ajax>
+       <iron-ajax id="ajax" auto handle-as="json" url="${url}"></iron-ajax>
        
     `;
     }
