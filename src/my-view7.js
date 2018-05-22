@@ -1,4 +1,4 @@
-//PATIENT IDENTIFIER --not iterable when value is null(check always with patient id-81036)
+//PATIENT IDENTIFIER
 import {LitElement, html} from '@polymer/lit-element/lit-element.js';
 import '@material/mwc-textfield/mwc-textfield.js';
 import '@polymer/iron-ajax/iron-ajax.js';
@@ -26,8 +26,11 @@ class MyView7 extends LitElement {
 
     _didRender() {
         this.shadowRoot.getElementById('ajax').addEventListener('iron-ajax-response', function (e) {
-            var i = 0;
-            for (let identifier of e.detail.response.identifier) {
+
+            if(e.detail.response.identifier != undefined)
+            {
+             var i = 0;
+             for (let identifier of e.detail.response.identifier) {
                 if (i > 0) {
                     var child = e.target.parentNode.childNodes[1].cloneNode(true);
                     e.target.parentNode.appendChild(child);
@@ -36,6 +39,11 @@ class MyView7 extends LitElement {
                 e.target.parentNode.querySelectorAll('.systemIdentifier')[i].value = e.detail.response.identifier[i].system;
                 e.target.parentNode.querySelectorAll('.identifierField')[i].value = e.detail.response.identifier[i].value;
                 i++;
+             }
+            }
+            else if(e.detail.response.identifier == undefined)
+            {
+                e.target.parentNode.removeChild(e.target.parentNode.childNodes[1]);
             }
         });
     }
