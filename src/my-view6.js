@@ -1,17 +1,23 @@
 //PATIENT MARITAL STATUS
 import {LitElement, html} from '@polymer/lit-element/lit-element.js';
-//import '@polymer/paper-dropdown-menu/paper-dropdown-menu.js';
-//import '@polymer/paper-item/paper-item.js';
-//import '@polymer/paper-listbox/paper-listbox.js';
-//import '@polymer/iron-demo-helpers/demo-pages-shared-styles.js';
-//import 'web-animations-js/web-animations-next-lite.min.js';
 import '@material/mwc-formfield/mwc-formfield.js';
 import '@material/mwc-radio/mwc-radio.js';
 import '@polymer/iron-ajax/iron-ajax.js';
 
 class MyView6 extends LitElement {
+    static get properties() {
+        return {
+            tableResponsive: Boolean,
+            url: String
+        }
+    }
+
+    constructor() {
+        super();
+        this.tableResponsive = true;
+    }
     _didRender() {
-        this.shadowRoot.getElementById('ajax').addEventListener('response', function(e){
+        this.shadowRoot.getElementById('ajax').addEventListener('iron-ajax-response', function(e){
             if(e.detail.response.maritalStatus != undefined)
             {
             var i=0;
@@ -27,14 +33,14 @@ class MyView6 extends LitElement {
             }
             else if(e.detail.response.maritalStatus == undefined)
             {
-                e.target.parentNode.removeChild(e.target.parentNode.childNodes[2]);
+                console.log("Value was not filled by user previously")
             }
         });
     }
 
-    _render({}) {
+    _render({tableResponsive, url}) {
         return html`
-       <table class="tabletable-responsive">
+       ${tableResponsive ? html`<table class="tableResponsive">
        <form>
        <tr>
        <td><mwc-formfield label="Annulled"><mwc-radio id="annulled" value="A"></mwc-radio></mwc-formfield></td>
@@ -50,16 +56,10 @@ class MyView6 extends LitElement {
        <td><mwc-formfield label="Never Married"><mwc-radio id="nevermarried" value="S"></mwc-radio></mwc-formfield></td>             
        <td><mwc-formfield label="Domestic partner"><mwc-radio id="domesticpartner" value="T"></mwc-radio></mwc-formfield></td>
         <td><mwc-formfield label="Unknown"><mwc-radio id="unknown" value="UNK"></mwc-radio></mwc-formfield></td> 
-       </tr>
-       <tr>
-       
-      
-       
        </tr> 
-       
-       <iron-ajax id="ajax" auto handle-as="json" url="http://hapi.fhir.org/baseDstu3/Patient/2"></iron-ajax> 
        </form>
-       </table>
+       </table>` : ''}
+       <iron-ajax id="ajax" auto handle-as="json" url="${url}"></iron-ajax>
     `;
     }
 }
