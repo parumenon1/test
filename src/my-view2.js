@@ -21,13 +21,14 @@ class MyView2 extends LitElement {
     _didRender() {
 
         this.shadowRoot.getElementById('ajax').addEventListener('iron-ajax-response', function (e) {
+
             if (e.detail.response.active != undefined) {
                 if (e.detail.response.active) {
-                    e.target.parentNode.querySelectorAll('.active').checked = true;
+                    e.target.parentNode.getElementById('active').checked = true;
                 }
                 else (!e.detail.response.active)
                 {
-                    e.target.parentNode.querySelectorAll('.active').checked = false;
+                    e.target.parentNode.getElementById('active').checked = false;
                 }
             }
             else if (e.detail.response.active == undefined) {
@@ -39,12 +40,10 @@ class MyView2 extends LitElement {
 
     _render({activeStatus, url}) {
         return html`
-       <div>
        ${activeStatus ? html`<mwc-formfield class="activeStatus" alignEnd label="Active status:">
-         <mwc-checkbox class="active" value="true"></mwc-checkbox>
+         <mwc-checkbox id="active" value="true"></mwc-checkbox>
          </mwc-formfield>` : ''}
        <iron-ajax id="ajax" auto handle-as="json" url="${url}"></iron-ajax>
-       </div>
        
     `;
     }
