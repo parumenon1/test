@@ -19,7 +19,7 @@ class MyView9 extends LitElement {
     }
 
     _didRender() {
-        this.shadowRoot.getElementById('ajax').addEventListener('response', function(e){
+        this.shadowRoot.getElementById('ajax').addEventListener('iron-ajax-response', function(e){
             if(e.detail.response.communication != undefined) {
                 var i = 0;
                 for (let identifier of e.detail.response.identifier) {
