@@ -1,50 +1,53 @@
-//PATIENT NAME-!! CONVERT THE SELECT OPTION TO MWC FORMAT
+//PATIENT NAME
 import {LitElement, html} from '@polymer/lit-element/lit-element.js';
 import '@material/mwc-textfield/mwc-textfield.js';
+import './fhir-period.js';
 import '@polymer/iron-ajax/iron-ajax.js';
 class MyView1 extends LitElement {
-    _didRender() {
-        var child = e.target.parentNode;
-        this.shadowRoot.getElementById('ajax').addEventListener('response', function(e){
-            if(e.detail.response.name != undefined) {
-                e.target.parentNode.getElementById('firstname').value = e.detail.response.name[0].given;
-                e.target.parentNode.getElementById('lastname').value = e.detail.response.name[0].family;
-                //add what should prefix get get
-            }
-
-            if(e.detail.response.name == undefined)
-            {
-                child.removeChild(child.childNodes[6]);//prefix
-                child.removeChild(child.childNodes[8]);//firstname
-                child.removeChild(child.childNodes[10]);//lastname
-                //remove use as well
-            }
-            if(e.detail.response.name[0].use != undefined)
-            {
-                var j =1;
-                while(true)
-                {
-                    if(child.childNodes[1].nextElementSibling.childNodes[j].value == e.detail.response.name[0].use)
-                    {
-                        //select that option as per value??????
-                        break;
-                    }
-                    j=j+2;
-                }
-            }
-
-            //console.log(e.detail.response.name[0].use);
-            //below is for select getting to value of type of child(select) 1st: go odd number wise to get next
-            //console.log(e.target.parentNode.childNodes[1].nextElementSibling.childNodes[1].value);
-
-        });
+    static get properties() {
+        return {
+            useField: Boolean,
+            suffixField: Boolean,
+            fName: Boolean,
+            lName: Boolean,
+            periodField: Boolean,
+            url: String
+        }
     }
 
-    _render({}) {
+    constructor() {
+        super();
+        this.useField = true;
+        this.suffixField = true;
+        this.fName = true;
+        this.lName = true;
+        this.periodField = false;
+    }
+    _didRender() {
+
+        this.shadowRoot.getElementById('ajax').addEventListener('response', function(e){
+            var i = 0;
+            for (let val of e.detail.response.name) {
+                if (i > 0) {
+                    var child = e.target.parentNode.childNodes[1].cloneNode(true);
+                    e.target.parentNode.appendChild(child);
+                }
+                e.target.parentNode.querySelectorAll('.useField')[i].value = e.detail.response.name[i].use;
+                e.target.parentNode.querySelectorAll('.suffixField')[i].value = e.detail.response.name[i].suffix;
+                e.target.parentNode.querySelectorAll('.fName')[i].value = e.detail.response.name[i].given;
+                e.target.parentNode.querySelectorAll('.lName')[i].value = e.detail.response.name[i].family;
+                i++;
+            }
+        });
+
+    }
+
+    _render({useField, suffixField, fName, lName, periodField}) {
         return html`
-   
-   <label>Use</label>
-     <select>
+   <div>  
+   ${useField ? html`
+     <label>Use:</label>
+     <select class="useField">
          <option value="usual">Usual</option>
          <option value="official">Official</option>
          <option value="temp">Temporary</option>
@@ -52,18 +55,19 @@ class MyView1 extends LitElement {
          <option value="anonymous">Anonymous</option>
          <option value="old">Old</option>
          <option value="maiden">Maiden</option>
-     </select><br>
-    
-     
-     <select>
+     </select>` : ''}
+      ${suffixField ? html`
+     <select class="suffixField">
          <option value="mr">Mr</option>
          <option value="ms">Ms</option>
          <option value="mrs">Mrs</option>
-         <option value="jr">Jr</option>
-         <option value="sr">Sr</option>
-     </select>
-     <mwc-textfield outlined id="firstname" label="First Name:"></mwc-textfield>
-     <mwc-textfield outlined id="lastname" label="Last Name:"></mwc-textfield>
+         <option value="Junior">Jr</option>
+         <option value="senior">Sr</option>
+     </select>` : ''}
+     ${fName ? html`<mwc-textfield outlined class="fName" id="firstname" label="First Name:"></mwc-textfield>` : ''}
+     ${lName ? html`<mwc-textfield outlined class="lName" id="lastname" label="Last Name:"></mwc-textfield>` : ''}
+     ${periodField ? html`<fhir-period class="periodField"></fhir-period>` : ''}
+     </div> 
      <iron-ajax id="ajax" auto handle-as="json" url="http://hapi.fhir.org/baseDstu3/Patient/2"></iron-ajax>
     `;
     }
