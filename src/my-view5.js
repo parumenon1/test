@@ -15,7 +15,14 @@ class MyView5 extends LitElement {
     }
     _didRender() {
         this.shadowRoot.getElementById('ajax').addEventListener('iron-ajax-response', function(e){
-            e.target.parentNode.getElementById('date').value = e.detail.response.birthDate;
+            if(e.detail.response.birthDate != undefined)
+            {
+                e.target.parentNode.getElementById('date').value = e.detail.response.birthDate;
+            }
+            else if(e.detail.response.birthDate == undefined)
+            {
+                e.target.parentNode.removeChild(e.target.parentNode.childNodes[1]);
+            }
 
         });
     }
