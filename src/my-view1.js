@@ -26,6 +26,8 @@ class MyView1 extends LitElement {
     _didRender() {
 
         this.shadowRoot.getElementById('ajax').addEventListener('iron-ajax-response', function(e){
+            if(e.detail.response.name != undefined)
+            {
             var i = 0;
             for (let val of e.detail.response.name) {
                 if (i > 0) {
@@ -37,6 +39,11 @@ class MyView1 extends LitElement {
                 e.target.parentNode.querySelectorAll('.fName')[i].value = e.detail.response.name[i].given;
                 e.target.parentNode.querySelectorAll('.lName')[i].value = e.detail.response.name[i].family;
                 i++;
+            }
+            }
+            else if(e.detail.response.name == undefined)
+            {
+                e.target.parentNode.removeChild(e.target.parentNode.childNodes[1]);
             }
         });
 
