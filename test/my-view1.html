@@ -7,10 +7,10 @@ The complete set of contributors may be found at http://polymer.github.io/CONTRI
 Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
-
+//patient2
 <!doctype html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
 
@@ -21,23 +21,48 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <!-- Import the element to test -->
     <script type="module" src="../src/my-view1.js"></script>
-  </head>
-  <body>
-    <test-fixture id="BasicView">
-      <template>
-        <my-view1></my-view1>
-      </template>
-    </test-fixture>
+</head>
+<body>
+<test-fixture id="BasicView">
+    <template>
+        <my-view1 url="http://hapi.fhir.org/baseDstu3/Patient/2"></my-view1>
+    </template>
+</test-fixture>
 
-    <script type="module">
-      suite('my-view1 tests', function() {
-        test('Number in circle should be 1', function() {
-          var myView = fixture('BasicView');
-          var circle = myView.shadowRoot.querySelector('.circle');
+<test-fixture id="MiddleNameView">
+    <template>
+        <my-view1 mName url="http://hapi.fhir.org/baseDstu3/Patient/2"></my-view1>
+    </template>
+</test-fixture>
 
-          assert.equal(circle.textContent, '1');
+<script type="module">
+
+    suite('my-view1 tests', function () {
+        test('Firstname should be loaded from given name field', function (done) {
+            var myView = fixture('BasicView');
+            myView.addEventListener('iron-ajax-response', function () {
+                var firstName = myView.shadowRoot.querySelector('.fName').value;
+                assert.equal(firstName, 'Hồng,Nam');
+                assert.notEqual(firstName, 'Trần');
+                assert.notEqual(firstName, 'Hồng');
+                done();
+            });
         });
-      });
-    </script>
-  </body>
+
+        test('Middlename should be shown in its own field if true', function (done) {
+            var myView = fixture('MiddleNameView');
+            myView.addEventListener('iron-ajax-response', function () {
+                var firstName = myView.shadowRoot.querySelector('.mName').value;
+                if (myView.mName) {
+                    assert.notEqual(firstName, 'Hồng,Nam');
+                } else {
+                    assert.equal(firstName, 'Hồng,Nam');
+                }
+
+                done();
+            });
+        });
+    });
+</script>
+</body>
 </html>
