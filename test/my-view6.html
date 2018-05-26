@@ -1,0 +1,55 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+//patient 2
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+    <title>my-view6</title>
+
+    <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
+    <script src="../node_modules/wct-browser-legacy/browser.js"></script>
+
+    <!-- Import the element to test -->
+    <script type="module" src="../src/my-view6.js"></script>
+</head>
+<body>
+<test-fixture id="BasicView">
+    <template>
+        <my-view6 url="http://hapi.fhir.org/baseDstu3/Patient/2"></my-view6>
+    </template>
+</test-fixture>
+
+
+
+<script type="module">
+
+    suite('my-view6 tests', function () {
+        test('As patient 2 doesnot have marital status it doesnot receive value and child node removed. Hence th count of child nodes of shadowroot is undefined and length is 0', function (done) {
+            var myView = fixture('BasicView');
+            myView.addEventListener('iron-ajax-response', function () {
+                var marriage = myView.childNodes.count;
+                var marriagecount = myView.childNodes.length;
+                assert.equal(marriage, undefined);
+                assert.equal(marriagecount, "0");
+                assert.notEqual(marriagecount, "1");
+                assert.notEqual(marriage, "1");
+                assert.notEqual(marriage, false);
+
+
+                done();
+            });
+        });
+    });
+</script>
+</body>
+</html>
