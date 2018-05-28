@@ -1,0 +1,105 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+//patient 2
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+    <title>my-view8</title>
+
+    <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
+    <script src="../node_modules/wct-browser-legacy/browser.js"></script>
+
+    <!-- Import the element to test -->
+    <script type="module" src="../src/my-view8.js"></script>
+</head>
+<body>
+<test-fixture id="BasicView">
+    <template>
+        <my-view8 url="http://hapi.fhir.org/baseDstu3/Patient/2"></my-view8>
+    </template>
+</test-fixture>
+
+
+
+<script type="module">
+
+    suite('my-view8 tests', function () {
+        test('use field displayed correctly', function (done) {
+            var myView = fixture('BasicView');
+            myView.addEventListener('iron-ajax-response', function () {
+                var use = myView.shadowRoot.querySelector('.useSelect').value;
+                assert.equal(use, "home");
+                assert.notEqual(use, "official");
+                done();
+            });
+        });
+
+        test('type of address displayed correctly', function (done) {
+            var myView = fixture('BasicView');
+            myView.addEventListener('iron-ajax-response', function () {
+                var type = myView.shadowRoot.querySelector('.typeSelect').value;
+                assert.equal(type, "both");
+                assert.notEqual(type, "postal");
+                assert.notEqual(type, "Heloo Bhavesh");
+                    done();
+                });
+            });
+        test('Address line 1 is displayed correctly', function (done) {
+            var myView = fixture('BasicView');
+            myView.addEventListener('iron-ajax-response', function () {
+                var add1 = myView.shadowRoot.querySelector('.add1Field').value;
+                assert.equal(add1, "Heloo Bhavesh");
+                assert.notEqual(add1, "secondary");
+                assert.notEqual(add1, "both");
+                assert.notEqual(add1, "type");
+                done();
+            });
+        });
+        test('Address line 2 is displayed correctly', function (done) {
+            var myView = fixture('BasicView');
+            myView.addEventListener('iron-ajax-response', function () {
+                var add2 = myView.shadowRoot.querySelector('.add2Field').value;
+                assert.equal(add2, "489 Láng");
+                assert.notEqual(add2, "home");
+                assert.notEqual(add2, "both");
+                assert.notEqual(add2, "Hà Nội");
+                done();
+            });
+        });
+        test('city is displayed correctly', function (done) {
+            var myView = fixture('BasicView');
+            myView.addEventListener('iron-ajax-response', function () {
+                var city = myView.shadowRoot.querySelector('.cityField').value;
+                assert.equal(city, "Hà Nội");
+                assert.notEqual(city, "Đống Đa");
+                assert.notEqual(city, "both");
+                assert.notEqual(city, "home");
+                done();
+            });
+        });
+        test('district is displayed correctly', function (done) {
+            var myView = fixture('BasicView');
+            myView.addEventListener('iron-ajax-response', function () {
+                var district = myView.shadowRoot.querySelector('.districtField').value;
+                assert.equal(district, "Đống Đa");
+                assert.notEqual(district, "Hà Nội");
+                assert.notEqual(district, "412345");
+                assert.notEqual(district, "both");
+                done();
+            });
+        });
+
+    });
+</script>
+</body>
+</html>
