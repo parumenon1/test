@@ -1,0 +1,82 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+//patient 2
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+    <title>my-view11</title>
+
+    <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
+    <script src="../node_modules/wct-browser-legacy/browser.js"></script>
+
+    <!-- Import the element to test -->
+    <script type="module" src="../src/my-view11.js"></script>
+</head>
+<body>
+<test-fixture id="BasicView">
+    <template>
+        <my-view11 url="http://hapi.fhir.org/baseDstu3/Patient/2"></my-view11>
+    </template>
+</test-fixture>
+
+
+
+<script type="module">
+
+    suite('my-view11 tests', function () {
+        test('SYSTEM field displayed correctly', function (done) {
+            var myView = fixture('BasicView');
+            myView.addEventListener('iron-ajax-response', function () {
+                var use = myView.shadowRoot.querySelector('.systemField').value;
+                assert.equal(use, "phone");
+                assert.notEqual(use, "734 483 8464");
+                done();
+            });
+        });
+
+        test('USE FIELD displayed correctly', function (done) {
+            var myView = fixture('BasicView');
+            myView.addEventListener('iron-ajax-response', function () {
+                var type = myView.shadowRoot.querySelector('.useField').value;
+                assert.equal(type, "home");
+                assert.notEqual(type, "734 483 8464");
+                assert.notEqual(type, "phone");
+                    done();
+                });
+            });
+        test('CONATACT NUMBER is displayed correctly', function (done) {
+            var myView = fixture('BasicView');
+            myView.addEventListener('iron-ajax-response', function () {
+                var add1 = myView.shadowRoot.querySelector('.contNumb').value;
+                assert.equal(add1, "734 483 8464");
+                assert.notEqual(add1, "phone");
+                assert.notEqual(add1, "both");
+                assert.notEqual(add1, "home");
+                done();
+            });
+        });
+        test('RANK is displayed correctly', function (done) {
+            var myView = fixture('BasicView');
+            myView.addEventListener('iron-ajax-response', function () {
+                var add2 = myView.shadowRoot.querySelector('.rankVal').value;
+                assert.equal(add2, "1");
+                assert.notEqual(add2, "2");
+                assert.notEqual(add2, "both");
+                assert.notEqual(add2, "phone");
+                done();
+            });
+        });
+    });
+</script>
+</body>
+</html>
