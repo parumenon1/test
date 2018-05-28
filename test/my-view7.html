@@ -1,0 +1,72 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+//patient 81036
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+    <title>my-view7</title>
+
+    <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
+    <script src="../node_modules/wct-browser-legacy/browser.js"></script>
+
+    <!-- Import the element to test -->
+    <script type="module" src="../src/my-view7.js"></script>
+</head>
+<body>
+<test-fixture id="BasicView">
+    <template>
+        <my-view7 url="http://hapi.fhir.org/baseDstu3/Patient/81036"></my-view7>
+    </template>
+</test-fixture>
+
+
+
+<script type="module">
+
+    suite('my-view7 tests', function () {
+        test('Patient identifier is displayed correctly', function (done) {
+            var myView = fixture('BasicView');
+            myView.addEventListener('iron-ajax-response', function () {
+                var idf1 = myView.shadowRoot.querySelector('.identifierField').value;
+                assert.equal(idf1, "LDX12345");
+                assert.notEqual(idf1, "412345");
+                done();
+            });
+        });
+
+        test('Patient system identifier is displayed correctly', function (done) {
+            var myView = fixture('BasicView');
+            myView.addEventListener('iron-ajax-response', function () {
+                var idf = myView.shadowRoot.querySelector('.systemIdentifier').value;
+                assert.equal(idf, "urn:lumiradx:consult");
+                assert.notEqual(idf, "412345");
+                assert.notEqual(idf, "urn:lumiradx:mpi");
+                    done();
+                });
+            });
+        test('Identifier use is displayed correctly', function (done) {
+            var myView = fixture('BasicView');
+            myView.addEventListener('iron-ajax-response', function () {
+                var idf = myView.shadowRoot.querySelector('.useField').value;
+                assert.equal(idf, "official");
+                assert.notEqual(idf, "secondary");
+                assert.notEqual(idf, "412345");
+                assert.notEqual(idf, "urn:lumiradx:mpi");
+                done();
+            });
+        });
+
+    });
+</script>
+</body>
+</html>
