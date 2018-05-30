@@ -7,7 +7,6 @@ The complete set of contributors may be found at http://polymer.github.io/CONTRI
 Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
-//patient 2
 <!doctype html>
 <html lang="en">
 <head>
@@ -25,25 +24,51 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <body>
 <test-fixture id="BasicView">
     <template>
-        <my-view2 url="http://hapi.fhir.org/baseDstu3/Patient/2"></my-view2>
+        <my-view2 url="/load_patient_data"></my-view2>
     </template>
 </test-fixture>
 
 
 
 <script type="module">
+    import patient2 from '../test/resource/patient2.js';
+    suite('<iron-ajax>', function() {
+        var ajax;
+        var request;
+        var server;
+        var myView;
+        var responseHeaders = {
+            json: {'Content-Type': 'application/json'}
+        };
+        setup(function () {
+            server = sinon.fakeServer.create();
+            server.respondImmediately = true;
+            server.respondWith('GET',/\/load_patient_data.*/,
+                [200,
+                    {'Content-Type': 'application/json'},
+                    JSON.stringify(patient2)
+                ]
+            );
+        });
+        teardown(function () {
+            server.restore();
+        });
 
     suite('my-view2 tests', function () {
+        setup(function () {
+            myView = fixture('BasicView');
+        });
         test('Active state true or false ', function (done) {
             var myView = fixture('BasicView');
             myView.addEventListener('iron-ajax-response', function () {
-                var firstName = myView.shadowRoot.getElementById('active').checked;
-                assert.equal(firstName, false);
-                assert.notEqual(firstName, true);
+                var status = myView.shadowRoot.getElementById('active').checked;
+                assert.equal(status, false);
+                assert.notEqual(status, true);
                 done();
             });
         });
 
+    });
     });
 </script>
 </body>
