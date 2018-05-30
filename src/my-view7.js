@@ -26,7 +26,6 @@ class MyView7 extends LitElement {
 
     _didRender() {
         this.shadowRoot.getElementById('ajax').addEventListener('iron-ajax-response', function (e) {
-
             if(e.detail.response.identifier != undefined)
             {
              var i = 0;
@@ -51,6 +50,7 @@ class MyView7 extends LitElement {
     _render({useField, systemIdentifier, identifierField, periodField, url}) {
         return html`
 <div>
+<label>IDENTIFIER:</label>
     ${useField ? html`
     Use:<select class="useField">
         <option value="usual">Usual</option>
@@ -60,9 +60,9 @@ class MyView7 extends LitElement {
     </select>` : ''}
     ${systemIdentifier ? html`<mwc-textfield outlined class="systemIdentifier" label="System:"></mwc-textfield>` : ''}
     ${identifierField ? html`<mwc-textfield outlined class="identifierField" label="Identifier:"></mwc-textfield>` : ''}
-${periodField ? html`<fhir-period class="periodField"></fhir-period>` : ''}
+    ${periodField ? html`<fhir-period class="periodField"></fhir-period>` : ''}
 </div>
-<iron-ajax id="ajax" auto handle-as="json" url="${url}"></iron-ajax>
+<iron-ajax id="ajax" bubbles auto handle-as="json" url="${url}"></iron-ajax>
     `;
     }
 }
