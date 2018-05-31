@@ -7,7 +7,6 @@ The complete set of contributors may be found at http://polymer.github.io/CONTRI
 Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
-//patient 2
 <!doctype html>
 <html lang="en">
 <head>
@@ -25,17 +24,42 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <body>
 <test-fixture id="BasicView">
     <template>
-        <my-view5 url="http://hapi.fhir.org/baseDstu3/Patient/2"></my-view5>
+        <my-view5 url="/load_patient_data"></my-view5>
     </template>
 </test-fixture>
 
 
 
 <script type="module">
+    import patient2 from '../test/resource/patient2.js';
+    suite('<iron-ajax>', function() {
+        var ajax;
+        var request;
+        var server;
+        var myView;
+        var responseHeaders = {
+            json: {'Content-Type': 'application/json'}
+        };
+        setup(function () {
+            server = sinon.fakeServer.create();
+            server.respondImmediately = true;
+            server.respondWith('GET',/\/load_patient_data.*/,
+                [200,
+                    {'Content-Type': 'application/json'},
+                    JSON.stringify(patient2)
+                ]
+            );
+        });
+        teardown(function () {
+            server.restore();
+        });
 
     suite('my-view5 tests', function () {
+        setup(function () {
+            myView = fixture('BasicView');
+        });
+
         test('receives correct date of birth in right format', function (done) {
-            var myView = fixture('BasicView');
             myView.addEventListener('iron-ajax-response', function () {
                 var dob = myView.shadowRoot.getElementById('date').value;
                 assert.equal(dob, "2000-02-10");
@@ -44,7 +68,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 done();
             });
         });
-
+    });
     });
 </script>
 </body>
