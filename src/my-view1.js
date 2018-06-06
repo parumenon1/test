@@ -11,7 +11,8 @@ class MyView1 extends LitElement {
             fName: Boolean,
             lName: Boolean,
             periodField: Boolean,
-            url: String
+            url: String,
+            value: Object
         }
     }
 
@@ -22,9 +23,9 @@ class MyView1 extends LitElement {
         this.fName = true;
         this.lName = true;
         this.periodField = false;
+        this.value = {};
     }
     _didRender() {
-
         this.shadowRoot.getElementById('ajax').addEventListener('iron-ajax-response', function(e){
             if(e.detail.response.name != undefined)
             {
@@ -49,12 +50,12 @@ class MyView1 extends LitElement {
 
     }
 
-    _render({useField, suffixField, fName, lName, periodField, url}) {
+    _render({useField, suffixField, fName, lName, periodField, url, value}) {
         return html`
    <div>  
    ${useField ? html`
      <label>Use:</label>
-     <select class="useField">
+     <select class="useField" on-change="${e => this.value.use = e.target.value}">
          <option value="usual">Usual</option>
          <option value="official">Official</option>
          <option value="temp">Temporary</option>
@@ -64,15 +65,15 @@ class MyView1 extends LitElement {
          <option value="maiden">Maiden</option>
      </select>` : ''}
       ${suffixField ? html`
-     <select class="suffixField">
+     <select class="suffixField" on-change="${e => this.value.suffix = e.target.value}" >
          <option value="mr">Mr</option>
          <option value="ms">Ms</option>
          <option value="mrs">Mrs</option>
          <option value="Junior">Jr</option>
          <option value="Senior">Sr</option>
      </select>` : ''}
-     ${fName ? html`<mwc-textfield outlined class="fName" id="firstname" label="First Name:"></mwc-textfield>` : ''}
-     ${lName ? html`<mwc-textfield outlined class="lName" id="lastname" label="Last Name:"></mwc-textfield>` : ''}
+     ${fName ? html`<mwc-textfield outlined class="fName" on-input="${e => this.value.given = e.target._input.value}" label="First Name:"></mwc-textfield>` : ''}
+     ${lName ? html`<mwc-textfield outlined class="lName" on-input="${e => this.value.family = e.target._input.value}"id="lastname" label="Last Name:"></mwc-textfield>` : ''}
      ${periodField ? html`<fhir-period class="periodField"></fhir-period>` : ''}
      </div> 
      <iron-ajax id="ajax" auto handle-as="json" url="${url}"></iron-ajax>

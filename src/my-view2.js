@@ -1,4 +1,4 @@
-//PATIENT ACTIVE STATUS
+
 import {LitElement, html} from '@polymer/lit-element/lit-element.js';
 import '@material/mwc-formfield/mwc-formfield.js';
 import '@material/mwc-checkbox/mwc-checkbox.js'

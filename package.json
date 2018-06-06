@@ -13,6 +13,7 @@
     "test:integration": "polymer build # test that psk builds without error with the CLI"
   },
   "dependencies": {
+    "@material/mwc-button": "file:material-components-web-components/packages/button",
     "@material/mwc-checkbox": "file:material-components-web-components/packages/checkbox",
     "@material/mwc-formfield": "file:material-components-web-components/packages/formfield",
     "@material/mwc-radio": "file:material-components-web-components/packages/radio",
@@ -33,6 +34,7 @@
     "@polymer/paper-item": "^3.0.0-pre.19",
     "@polymer/paper-listbox": "^3.0.0-pre.19",
     "@polymer/polymer": "^3.0.0",
+    "@vaadin/vaadin-grid": "^5.0.0-pre.5",
     "@webcomponents/webcomponentsjs": "^2.0.0",
     "requirejs": "^2.3.5",
     "web-animations-js": "^2.3.1"

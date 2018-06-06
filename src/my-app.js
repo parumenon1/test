@@ -95,6 +95,8 @@ class MyApp extends PolymerElement {
             <a name="view9" href="[[rootPath]]view9">View Nine</a>
             <a name="view10" href="[[rootPath]]view10">View Ten</a>
             <a name="view11" href="[[rootPath]]view11">View Eleven</a>
+            <a name="view12" href="[[rootPath]]view12">View Twelve</a>
+            <a name="view13" href="[[rootPath]]view13">View Thirteen</a>
           </iron-selector>
         </app-drawer>
 
@@ -120,6 +122,8 @@ class MyApp extends PolymerElement {
             <my-view9 name="view9"></my-view9>
             <my-view10 name="view10"></my-view10>
             <my-view11 name="view11"></my-view11>
+            <my-view12 name="view12"></my-view12>
+            <my-view13 name="view13"></my-view13>
             <my-view404 name="view404"></my-view404>
           </iron-pages>
         </app-header-layout>
@@ -152,7 +156,7 @@ class MyApp extends PolymerElement {
      // Show 'view1' in that case. And if the page doesn't exist, show 'view404'.
     if (!page) {
       this.page = 'view1';
-    } else if (['view1', 'view2', 'view3', 'view4', 'view5', 'view6', 'view7', 'view8', 'view9', 'view10', 'view11'].indexOf(page) !== -1) {
+    } else if (['view1', 'view2', 'view3', 'view4', 'view5', 'view6', 'view7', 'view8', 'view9', 'view10', 'view11', 'view12', 'view13' ].indexOf(page) !== -1) {
       this.page = page;
     } else {
       this.page = 'view404';
@@ -197,6 +201,10 @@ class MyApp extends PolymerElement {
             import('./my-view10.js');
         case 'view11':
             import('./my-view11.js');
+        case 'view12':
+            import('./my-view12.js');
+        case 'view13':
+            import('./my-view13.js');
       case 'view404':
         import('./my-view404.js');
         break;
