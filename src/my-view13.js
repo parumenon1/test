@@ -47,8 +47,7 @@ class MyView13 extends LitElement {
 
     _didRender() {
         this.shadowRoot.getElementById('ajax').addEventListener('iron-ajax-response', function (e) {
-            var grid = e.target.parentNode.getElementById('table');
-
+            var grid = e.target.parentNode.querySelector('#table');
             var items = [];
             for (let entry of e.detail.response.entry) {
                 items.push({
@@ -59,8 +58,10 @@ class MyView13 extends LitElement {
                     active: MyView13.undefinedToBlank(entry.resource.active)
                 });
             }
-            e.target.parentNode.getElementById('table').items = items;
-            console.log(grid)
+            grid.items = items;
+        });
+        this.shadowRoot.getElementById('table').addEventListener('active-item-changed', function (e) {
+            window.location.href = this.patientUrl + '?patientId=' + e.detail.value.id;
         });
     }
 
@@ -72,7 +73,7 @@ class MyView13 extends LitElement {
          <vaadin-grid-selection-column auto-select hidden></vaadin-grid-selection-column>
          <vaadin-grid-column width="50px " flex="0 ">
             <template class="header ">Identifier</template>
-            <template>[[item.id]]</template>
+            <template><a href="http://google.com">[[item.id]]</a></template>
          </vaadin-grid-column>
          <vaadin-grid-column>
             <template class="header ">Last Name</template>
@@ -95,7 +96,6 @@ class MyView13 extends LitElement {
     }
 
     makeQuery(param) {
-        console.log('in makequery');
         if (param.length > 2) {
             this.shadowRoot.getElementById('ajax').params = {"name": param};
             this.shadowRoot.getElementById('ajax').generateRequest()
